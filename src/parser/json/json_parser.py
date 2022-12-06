@@ -10,7 +10,7 @@
 # limitations under the License.
 import json
 
-from src.model.document import Document
+from src.model.document import Document, CreationInfo
 from src.parser.json.annotation_parser import AnnotationParser
 from src.parser.json.creation_info_parser import CreationInfoParser
 from src.parser.error import SPDXParsingError
@@ -49,9 +49,8 @@ class JsonParser:
         logger = Logger()
         with open(filename) as file:
             input_doc_as_dict = json.load(file)
-        spdx_version, spdx_id, name, document_namespace, creation_info = self.creation_info_parser.parse(
-            input_doc_as_dict)
-        document: Document = Document(spdx_version, spdx_id, name, document_namespace, creation_info)
+        creation_info: CreationInfo = self.creation_info_parser.parse_creation_info(input_doc_as_dict)
+        document: Document = Document(creation_info=creation_info)
 
         document.packages = self.package_parser.parse_packages(input_doc_as_dict.get("packages"))
         document.files = self.file_parser.parse_files(input_doc_as_dict.get("files"))

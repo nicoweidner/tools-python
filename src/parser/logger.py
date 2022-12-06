@@ -20,6 +20,10 @@ class Logger:
     def append(self, message: str):
         self.messages.append(message)
 
+    def append_all(self, messages: List[str]):
+        for message in messages:
+            self.messages.append(message)
+
     def has_errors(self):
         return bool(self.messages)
 
